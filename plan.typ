@@ -14,7 +14,12 @@
     set align(center)
     it
 }
-#let vtext(s) = stack(dir: ttb, spacing: 7pt, ..s.clusters().map(c => align(center, c)))
+
+#let vtext(s) = stack(
+    dir: ttb,
+    spacing: 7pt,
+    ..s.replace("——", "\u{fe31}").clusters().map(c => align(center, c)),
+)
 
 = Note
 
@@ -51,6 +56,8 @@
 = 课程
 
 #set math.frac(style: "horizontal")
+#show label("C"): it => strike(stroke: 2pt + blue.darken(30%), extent: 5pt, it)
+#show label("S"): it => strike(stroke: 2pt + red.darken(20%), extent: 5pt, it)
 #table(
     columns: 6,
     inset: 10pt,
@@ -99,7 +106,7 @@
     [sd01336500], [概率论与数理统计<C>], $3$, $3$,
     [sd01336550], [创新创业教育实践<C>], $3$, $4$,
     table.cell(colspan: 2)[合计], $35$, [],
-    table.cell(rowspan: 9, vtext("专业必修|专业基础")),
+    table.cell(rowspan: 9, vtext("专业必修——专业基础")),
     [sd01326330], [新生研讨课<C>], $1$, $1$,
     [sd01331760], [离散数学<C>], $4$, $2$,
     [sd01336530], [数据结构与算法<C>], $4$, $3$,
@@ -109,7 +116,7 @@
     [sd01331940], [算法设计与分析<C>], $3$, $4$,
     [sd013363B0], [数据库系统<C>], $4$, $4$,
     table.cell(colspan: 2)[合计], $28$, [],
-    table.cell(rowspan: 14, vtext("专业必修|专业核心")),
+    table.cell(rowspan: 14, vtext("专业必修——专业核心")),
     [sd01332140], [自主智能系统与机器人<C>], $3$, $3$,
     [sd01336540], [智能系统综合实践<C>], $2$, $3$,
     [sd01336590], [机器学习与模式识别<C>], $3$, $4$,
@@ -124,7 +131,7 @@
     [sd01336510], [专业实践<P>], $2$, $6$,
     [sd01330120], [毕业论文（设计）<P>], $7$, $8$,
     table.cell(colspan: 2)[合计], $40$, [],
-    table.cell(rowspan: 21, vtext("专业选修|专业限选")),
+    table.cell(rowspan: 21, vtext("专业选修——专业限选")),
     [sd0133232V], [密码学引论<P>], $3$, $5$,
     [sd013363F0], [分布式计算<P>], $3$, $5$,
     [sd01331110], [嵌入式系统原理与应用<P>], $3$, $5$,
@@ -146,7 +153,7 @@
     [sd013365F0], [人工智能驱动的科学研究<P>], $3$, $6$,
     [sd013364E0], [菁英班科研实践<P>], $3$, $6$,
     table.cell(colspan: 2)[合计], $6$, [],
-    table.cell(rowspan: 5, vtext("专业选修|专业任选")),
+    table.cell(rowspan: 5, vtext("专业选修——专业任选")),
     [sd01336470], [高级计算机体系结构（本研贯通）<P>], $3$, $7$,
     [sd01336480], [高级算法设计与分析（本研贯通）<P>], $3$, $7$,
     [sd013365C0], [学科前沿讲座<P>], $3$, $7$,
@@ -184,3 +191,13 @@
     [00230], [身心健康<C>], $2$, $1-8$,
     table.cell(colspan: 2)[合计], $4$, [],
 )
+#context {
+    let qs = (<C>, <P>, <S>).map(l => query(l))
+    let cells = qs.map(q => str(q.len())) + qs.map(q => q.map(c => c.text).join([,]))
+    table(
+        columns: 3,
+        inset: 10pt,
+        [已修], [待修], [不修],
+        ..cells,
+    )
+}
